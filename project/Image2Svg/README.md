@@ -1,13 +1,14 @@
 # Image2Svg Converter Utility
 
-Chuyển đổi hình ảnh (PNG, JPG, BMP, WEBP, v.v.) thành định dạng định dạng vectơ **SVG**.
-Hỗ trợ cả chế độ ảnh màu (high-fidelity color vectorization) và chế độ bản vẽ đen trắng (black & white sketch / CAD contour).
+Chuyển đổi hình ảnh (PNG, JPG, BMP, WEBP, v.v.) thành định dạng **SVG Vector**.
+Hỗ trợ 3 chế độ (presets):
+- **`color`**: Vectorize ảnh màu đầy đủ (hỗ trợ ảnh chụp, logo nhiều màu).
+- **`sketch`**: Trích xuất đường nét phác thảo (Line-Art Outline) từ ảnh chụp để làm Sketch cho Fusion 360 / Laser / CNC.
+- **`binary`**: Chuyển đổi đồ họa đen trắng (Binary Threshold) cho logo / đồ họa đơn sắc.
 
 ---
 
 ## 🛠️ Cài đặt thư viện
-
-Dự án đã sử dụng `vtracer` (Rust-backed vectorizer) và `opencv-python` cho độ chính xác cao.
 
 ```bash
 uv pip install pillow opencv-python vtracer numpy
@@ -17,30 +18,30 @@ uv pip install pillow opencv-python vtracer numpy
 
 ## 🚀 Cách sử dụng
 
-### 1. Dùng lệnh CLI đơn giản:
+### 1. Dùng lệnh CLI:
 
 ```bash
-# Chuyển đổi ảnh bất kỳ thành SVG (tự động lưu thành <tên_ảnh>.svg)
-python project/Image2Svg/image_to_svg.py logo.png
+# Trích xuất đường nét phác thảo (Sketch / Line-Art) từ bức ảnh chụp (Ví dụ: Ronaldo Siu)
+python project/Image2Svg/image_to_svg.py ronaldoSiu.png -p sketch -o ronaldoSiu_sketch.svg
 
-# Chỉ định đường dẫn đầu ra custom:
-python project/Image2Svg/image_to_svg.py logo.png -o output/logo_vector.svg
+# Vectorize toàn bộ mảng màu của ảnh (Color mode):
+python project/Image2Svg/image_to_svg.py image.png -p color -o image_color.svg
 
-# Chuyển bản vẽ sketch đen trắng (Binary mode):
-python project/Image2Svg/image_to_svg.py sketch.jpg -c binary
+# Chuyển đồ họa đen trắng đơn sắc (Binary mode):
+python project/Image2Svg/image_to_svg.py logo.png -p binary
 ```
 
 ---
 
-## 🐍 Dùng trong Python script:
+## 🐍 Dùng trong Python:
 
 ```python
 from project.Image2Svg.image_to_svg import convert_image_to_svg
 
+# Tạo đường nét phác thảo cho Fusion 360
 svg_file = convert_image_to_svg(
-    input_path="my_sketch.png",
-    output_path="my_sketch.svg",
-    color_mode="binary"  # hoặc "color"
+    input_path="ronaldoSiu.png",
+    output_path="ronaldoSiu_sketch.svg",
+    preset="sketch"
 )
-print("SVG saved at:", svg_file)
 ```
